@@ -1,0 +1,73 @@
+openapi: 3.0.3
+info:
+  title: Darija Translator API
+  version: 1.0.0
+  description: LLM-powered RESTful service for translating text into Moroccan Darija.
+servers:
+  - url: http://localhost:8080
+paths:
+  /translator/health:
+    get:
+      summary: Health check
+      responses:
+        '200':
+          description: Service is up
+  /translator/info:
+    get:
+      summary: Service info
+      responses:
+        '200':
+          description: Info returned
+  /translator/translate:
+    post:
+      summary: Translate text into Moroccan Darija
+      security:
+        - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TranslateRequest'
+      responses:
+        '200':
+          description: Successful translation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TranslateResponse'
+        '400':
+          description: Validation error
+        '401':
+          description: Unauthorized
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+  schemas:
+    TranslateRequest:
+      type: object
+      properties:
+        text:
+          type: string
+        sourceLanguage:
+          type: string
+          example: English
+        targetLanguage:
+          type: string
+          example: Moroccan Darija
+      required: [text]
+    TranslateResponse:
+      type: object
+      properties:
+        sourceText:
+          type: string
+        translatedText:
+          type: string
+        sourceLanguage:
+          type: string
+        targetLanguage:
+          type: string
+        provider:
+          type: string

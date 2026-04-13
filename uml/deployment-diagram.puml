@@ -1,0 +1,26 @@
+@startuml
+node "Client Machine" {
+  artifact "Chrome Extension\n(Manifest V3 + Side Panel)"
+  artifact "PHP Client"
+  artifact "Python Client"
+  artifact "React Native App"
+  artifact "Postman / cURL"
+}
+
+node "Application Server" {
+  artifact "Java Maven App\nJakarta REST + Grizzly"
+  artifact "Basic Auth Filter"
+  artifact "TranslatorResource"
+}
+
+cloud "Gemini API" {
+  artifact "LLM Translation Provider"
+}
+
+"Chrome Extension\n(Manifest V3 + Side Panel)" --> "Java Maven App\nJakarta REST + Grizzly" : HTTPS/HTTP REST
+"PHP Client" --> "Java Maven App\nJakarta REST + Grizzly" : HTTP REST
+"Python Client" --> "Java Maven App\nJakarta REST + Grizzly" : HTTP REST
+"React Native App" --> "Java Maven App\nJakarta REST + Grizzly" : HTTP REST
+"Postman / cURL" --> "Java Maven App\nJakarta REST + Grizzly" : HTTP REST
+"Java Maven App\nJakarta REST + Grizzly" --> "LLM Translation Provider" : HTTPS generateContent
+@enduml

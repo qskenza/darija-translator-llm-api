@@ -1,0 +1,104 @@
+@startuml
+top to bottom direction
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+skinparam roundcorner 0
+skinparam linetype ortho
+
+class Main {
+  +main(args: String[]): void
+  +startServer(baseUrl: String): void
+}
+
+class TranslatorApplication {
+  +TranslatorApplication()
+  +getApplicationName(): String
+}
+
+class TranslatorResource {
+  -translationService: TranslationService
+  +health(): Response
+  +info(): Response
+  +translate(request: TranslateRequest): Response
+}
+
+class TranslationService {
+  -primaryProvider: TranslationProvider
+  -fallbackProvider: TranslationProvider
+  +translate(text: String, sourceLanguage: String, targetLanguage: String): TranslateResponse
+}
+
+interface TranslationProvider {
+  +translate(text: String, sourceLanguage: String, targetLanguage: String): TranslateResponse
+}
+
+class GeminiTranslationProvider {
+  -apiKey: String
+  -model: String
+  +translate(text: String, sourceLanguage: String, targetLanguage: String): TranslateResponse
+}
+
+class SimpleFallbackTranslationProvider {
+  +translate(text: String, sourceLanguage: String, targetLanguage: String): TranslateResponse
+}
+
+class BasicAuthFilter {
+  -username: String
+  -password: String
+  +filter(requestContext): void
+}
+
+class CorsResponseFilter {
+  +filter(requestContext, responseContext): void
+}
+
+class TranslateRequest {
+  -text: String
+  -sourceLanguage: String
+  -targetLanguage: String
+  +getText(): String
+  +getSourceLanguage(): String
+  +getTargetLanguage(): String
+  +setText(text: String): void
+  +setSourceLanguage(sourceLanguage: String): void
+  +setTargetLanguage(targetLanguage: String): void
+}
+
+class TranslateResponse {
+  -translatedText: String
+  -provider: String
+  +getTranslatedText(): String
+  +getProvider(): String
+  +setTranslatedText(translatedText: String): void
+  +setProvider(provider: String): void
+}
+
+class ErrorResponse {
+  -error: String
+  -details: String
+  +getError(): String
+  +getDetails(): String
+  +setError(error: String): void
+  +setDetails(details: String): void
+}
+
+Main --> TranslatorApplication : starts
+TranslatorApplication --> TranslatorResource : registers
+TranslatorApplication --> BasicAuthFilter : registers
+TranslatorApplication --> CorsResponseFilter : registers
+
+TranslatorResource --> TranslationService : uses
+TranslatorResource --> TranslateRequest : receives
+TranslatorResource --> TranslateResponse : returns
+TranslatorResource --> ErrorResponse : returns
+
+TranslationService --> TranslationProvider : delegates to
+TranslationProvider <|.. GeminiTranslationProvider
+TranslationProvider <|.. SimpleFallbackTranslationProvider
+
+TranslationService --> GeminiTranslationProvider : primary
+TranslationService --> SimpleFallbackTranslationProvider : fallback
+
+BasicAuthFilter ..> TranslatorResource : protects
+CorsResponseFilter ..> TranslatorResource : adds CORS
+@enduml

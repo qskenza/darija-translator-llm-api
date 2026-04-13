@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+actor User
+rectangle "Darija Translator System" {
+  usecase "Submit text for translation" as UC1
+  usecase "Authenticate user" as UC2
+  usecase "Translate text to Darija" as UC3
+  usecase "Use Chrome extension" as UC4
+  usecase "Use PHP client" as UC5
+  usecase "Use Python client" as UC6
+  usecase "Use mobile app" as UC7
+}
+User --> UC1
+User --> UC4
+User --> UC5
+User --> UC6
+User --> UC7
+UC1 .> UC2 : <<include>>
+UC1 .> UC3 : <<include>>
+@enduml

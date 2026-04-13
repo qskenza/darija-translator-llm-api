@@ -1,0 +1,19 @@
+@startuml
+actor User
+participant "Chrome Extension" as CE
+participant "TranslatorResource" as API
+participant "BasicAuthFilter" as AUTH
+participant "TranslationService" as TS
+participant "Gemini API / Fallback" as LLM
+
+User -> CE : Select text + right click
+CE -> API : POST /translator/translate
+API -> AUTH : Validate Basic Auth
+AUTH --> API : Authorized
+API -> TS : translate(text, src, target)
+TS -> LLM : Request translation
+LLM --> TS : translated text
+TS --> API : TranslateResponse
+API --> CE : JSON response
+CE --> User : Display Darija translation
+@enduml
