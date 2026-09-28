@@ -91,7 +91,7 @@ public class GeminiTranslationProvider implements TranslationProvider {
                 throw new RuntimeException("Gemini response did not contain translated text");
             }
 
-            return new TranslateResponse(text, translated, sourceLanguage, targetLanguage, "gemini-" + model);
+            return new TranslateResponse(text, translated, sourceLanguage, targetLanguage, model);
         } catch (Exception e) {
             e.printStackTrace();
             throw new RuntimeException("Failed to call Gemini API", e);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 
-const API_URL = 'http://10.126.151.169:8080/translator/translate';
+const API_URL = 'http://YOUR-COMPUTER-IP:8080/translator/translate';
 const AUTH = 'Basic YWRtaW46YWRtaW4xMjM=';
 
 export default function App() {
